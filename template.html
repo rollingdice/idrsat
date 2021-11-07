@@ -1,7 +1,7 @@
 
 <!doctype html>
 <head>
-  <title>1,643 sats</title>
+  <title>Rp{{escape(idrpersat)}}/satoshi</title>
   <link rel="stylesheet" type="text/css" href="/static/skeleton.css">
   <link rel="stylesheet" type="text/css" href="/static/normalize.css">
   <link rel="stylesheet" type="text/css" href="/static/metricsgraphics.css">
@@ -15,80 +15,6 @@
   <div class="container" style="margin-top: 40px;">
     <div class="row">
       <center><h3>1 satoshi sekarang seharga {{escape(idrpersat)}} rupiah</h3></center>
-      <!--
-      <table class="u-full-width">
-        <thead>
-          <tr>
-		    <th>Date</th>
-            <th>Price</th>
-            <th>Percent Change</th>
-          </tr>
-		</thead>
-        <tbody>
-		
-          <tr>
-            <td>1 year ago</td>
-            <td>6,415 sats</td>
-            <td>- 74.388%</td>
-          </tr>
-		
-          <tr>
-            <td>2 years ago</td>
-            <td>10,700 sats</td>
-            <td>- 84.645%</td>
-          </tr>
-		
-          <tr>
-            <td>3 years ago</td>
-            <td>15,466 sats</td>
-            <td>- 89.377%</td>
-          </tr>
-		
-          <tr>
-            <td>4 years ago</td>
-            <td>14,372 sats</td>
-            <td>- 88.568%</td>
-          </tr>
-		
-          <tr>
-            <td>5 years ago</td>
-            <td>140,403 sats</td>
-            <td>- 98.830%</td>
-          </tr>
-		
-          <tr>
-            <td>6 years ago</td>
-            <td>259,875 sats</td>
-            <td>- 99.368%</td>
-          </tr>
-		
-          <tr>
-            <td>7 years ago</td>
-            <td>287,162 sats</td>
-            <td>- 99.428%</td>
-          </tr>
-		
-          <tr>
-            <td>8 years ago</td>
-            <td>394,177 sats</td>
-            <td>- 99.583%</td>
-          </tr>
-		
-          <tr>
-            <td>9 years ago</td>
-            <td>9,175,154 sats</td>
-            <td>- 99.982%</td>
-          </tr>
-		
-          <tr>
-            <td>10 years ago</td>
-            <td>33,257,949 sats</td>
-            <td>- 99.995%</td>
-          </tr>
-		 
-        </tbody>
-      </table>
-        -->
       <div id='historical'>
   	  </div>
 	</div>
@@ -111,22 +37,41 @@
             window.open('https://en.bitcoin.it/wiki/Controlled_supply', '_blank');
         };
 
+        var markers = [{
+            'date': new Date('2012-11-28T00:00:00.000Z'),
+            'label': 'QH1',
+	        'click': qhLink,
+        }, {
+            'date': new Date('2016-07-09T00:00:00.000Z'),
+            'label': 'QH2',
+	        'click': qhLink,
+        }, {
+            'date': new Date('2020-05-11T00:00:00.000Z'),
+            'label': 'QH3',
+	        'click': qhLink,
+        }];
+
         MG.data_graphic({
-            title: 'USDSAT Historical Performance',
+            title: 'Harga historis IDRSAT',
             data: data,
             full_width: true,
             height: graphHeight,
-			left: 52,
+            left: 70,
             area: true,
             color: '#FF9900',
             target: document.getElementById('historical'),
             xax_count: 10,
-            yax_count: 8,
+            yax_count: 9,
+            min_y : 0.01,
+            markers : markers,
             x_accessor: 'date',
             y_accessor: 'si',
             y_scale_type: 'log',
             y_extended_ticks: true,
-            yax_units: ' sats',
+            yax_format: d3.format(","),
+            x_label: 'Tanggal',
+            y_label: 'Satoshi per rupiah',
+            yax_units: 'sat',
             yax_units_append: true,
         });
 

@@ -15,7 +15,7 @@ BASEDIR_NAME = os.path.dirname(__file__)
 BASEDIR_PATH = os.path.abspath(BASEDIR_NAME)
 
 FILES_ROOT = os.path.join(BASEDIR_PATH, 'static')
-USDIDR = 14000
+fxrate = 14000
 
 historical_usd = json.load(open(os.path.join(BASEDIR_PATH, 'static/historical.json')))
 historical_idr = []
@@ -51,9 +51,10 @@ def make_app():
     return tornado.web.Application([
         (r"/", TemplateHandler),
         (r"/idrsat", MainHandler),
-        tornado.web.url(r"/static/(.+)", FileHandler),
         (r"/historical", HistoryHandler),
-    ],{"template_path":BASEDIR_PATH})
+        (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": FILES_ROOT}),
+    ],{"template_path":BASEDIR_PATH,
+        "static_path":BASEDIR_PATH+"/static"})
 
 async def refresh_price():
     global idrpersat
@@ -68,8 +69,8 @@ async def refresh_price():
     idrpersat = round (price / 100000000, 2)
 
 async def refresh_fxrate():
-    global historical_usd, historical_idr
-    #sample request: http://api.currencylayer.com/live?access_key=912446cbd5ed6d674116e2b7b87c0349&currencies=IDR&format=1
+    global fxrate
+    #sample request: http://api.currencylayer.com/live?access_key=1234567890abcdef0123456789abcdef&currencies=IDR&format=1
     api_root = "http://api.currencylayer.com"
     endpoint = "/live?currencies=IDR&format=1"
     access_token = "&access_key=" + fxtoken
@@ -78,15 +79,15 @@ async def refresh_fxrate():
     response = await http_client.fetch(api_url)
     response = json.loads(response.body)
     fxrate = response['quotes']['USDIDR']
-    for point in historical_usd:
-        historical_idr.append({"date":point["date"],
-                            "si":round(point["usdsat_rate"]/fxrate,4)})
 
 async def refresh_history():
-    global historical_usd
+    global historical_usd, historical_idr
     http_client = tornado.httpclient.AsyncHTTPClient()
     response = await http_client.fetch("https://usdsat.com/historical")
     historical_usd = json.loads(response.body)
+    for point in historical_usd:
+        historical_idr.append({"date":point["date"],
+                            "si":round(point["usdsat_rate"]/fxrate,4)})
 
 async def minute_loop():
     while True:
@@ -95,8 +96,8 @@ async def minute_loop():
 
 async def daily_loop():
     while True:
-        await refresh_history()
         await refresh_fxrate()
+        await refresh_history()
         await tornado.gen.sleep(86400)
 
 if __name__ == "__main__":
