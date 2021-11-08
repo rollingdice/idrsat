@@ -14,7 +14,10 @@
 <body>
   <div class="container" style="margin-top: 40px;">
     <div class="row">
-      <center><h3>1 satoshi sekarang seharga {{escape(idrpersat)}} rupiah</h3></center>
+      <center><h3>1 satoshi setara dengan {{escape(idrpersat)}} rupiah</h3>
+	      <p>Satoshi merupakan satuan terkecil dari Bitcoin.<br>
+		 1 satoshi setara dengan 0.00000001 bitcoin.<br>
+		 Demikian juga, 1 bitcoin setara dengan 100 juta satoshi.</p></center>
       <div id='historical'>
   	  </div>
       <center><div id='footer'><p>powered by <a href="https://nakamoto.id">nakamoto.id</a></p></div></center>
@@ -72,7 +75,7 @@
             yax_format: d3.format(","),
             x_label: 'Tanggal',
             y_label: 'Satoshi per rupiah',
-            yax_units: 'sat',
+            yax_units: ' satoshi per rupiah',
             yax_units_append: true,
         });
 

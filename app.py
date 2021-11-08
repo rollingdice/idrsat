@@ -99,13 +99,13 @@ async def minute_loop():
 
 async def daily_loop():
     while True:
-        #await refresh_fxrate()
+        await refresh_fxrate()
         await refresh_history()
         await tornado.gen.sleep(86400)
 
 if __name__ == "__main__":
     app = make_app()
-    app.listen(4000)
+    app.listen(5555)
     io_loop = tornado.ioloop.IOLoop.current()
     io_loop.spawn_callback(minute_loop)
     io_loop.spawn_callback(daily_loop)
