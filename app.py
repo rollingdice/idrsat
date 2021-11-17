@@ -82,9 +82,9 @@ async def refresh_fxrate():
 
 async def refresh_history():
     global historical_usd, historical_idr
-    #http_client = tornado.httpclient.AsyncHTTPClient()
-    #response = await http_client.fetch("https://usdsat.com/historical")
-    #historical_usd = json.loads(response.body)
+    http_client = tornado.httpclient.AsyncHTTPClient()
+    response = await http_client.fetch("https://usdsat.com/historical")
+    historical_usd = json.loads(response.body)
     i = 0
     for point in historical_usd:
         if i % 3 == 0:
